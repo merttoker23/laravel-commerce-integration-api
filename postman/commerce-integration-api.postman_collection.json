@@ -1,0 +1,45 @@
+{
+  "info": {
+    "name": "Laravel Commerce Integration API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080/api"
+    }
+  ],
+  "item": [
+    {
+      "name": "List Products",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/products"
+      }
+    },
+    {
+      "name": "Supplier Sync",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/integrations/suppliers/demo/sync"
+      }
+    },
+    {
+      "name": "Create Order",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/orders",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"customer\": {\n    \"name\": \"Jane Customer\",\n    \"email\": \"jane@example.com\"\n  },\n  \"items\": [\n    {\n      \"sku\": \"DEMO-TSHIRT-001\",\n      \"quantity\": 2\n    }\n  ],\n  \"shipping_address\": {\n    \"country\": \"TR\",\n    \"city\": \"Istanbul\",\n    \"line1\": \"Example Street No:10\"\n  }\n}"
+        }
+      }
+    }
+  ]
+}

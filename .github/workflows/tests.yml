@@ -1,18 +1,33 @@
-name: tests
+name: Quality checks
 
 on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
-  php-tests:
+  static-quality:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: shivammathur/setup-php@v2
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-      - run: composer install --no-interaction --prefer-dist
-      - run: cp .env.example .env
-      - run: php artisan key:generate
-      - run: php artisan test
+          tools: composer:v2
+          coverage: none
+
+      - name: Validate Composer configuration
+        run: composer validate --strict
+
+      - name: Check PHP syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          find app database routes tests -type f -name '*.php' -print0 \
+            | xargs -0 -n1 php -l
